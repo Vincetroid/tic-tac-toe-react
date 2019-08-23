@@ -68,7 +68,7 @@ class App extends Component {
 		ctx.strokeStyle = "white";
 		ctx.stroke();
 		ctx.closePath();
-		
+		debugger;
 		symbol[num-1] = human;
     }
 
@@ -89,6 +89,9 @@ class App extends Component {
 
     //3.Winner check function 
 	winnerCheck(symbol, player) {
+
+        // console.log(symbol, player);
+        debugger;
  
         const { winner } = this.state;
 
@@ -103,7 +106,7 @@ class App extends Component {
     //4. Box click function - human playing
 	boxClick(numId) {
         console.log('boxClick', numId)
-        let { box, ctx, num, filled, gameOver, turn, symbol } = this.state;
+        
 
         this.setState({
             box: document.getElementById(numId),
@@ -112,34 +115,45 @@ class App extends Component {
             ctx: this.state.box.getContext("2d"),
         });
 		switch(numId) {
-			case "canvas1": num = 1;
+			case "canvas1": this.setState({ num: 1 });
                 break;
-			case "canvas2": num = 2;
+			case "canvas2": this.setState({ num: 2 });
                 break;
-			case "canvas3": num = 3;
+			case "canvas3": this.setState({ num: 3 });
                 break;
-			case "canvas4": num = 4;
+			case "canvas4": this.setState({ num: 4 });
                 break;
-			case "canvas5": num = 5;
+			case "canvas5": this.setState({ num: 5 });
                 break;
-			case "canvas6": num = 6;
+			case "canvas6": this.setState({ num: 6 });
                 break;
-			case "canvas7": num = 7;
+			case "canvas7": this.setState({ num: 7 });
                 break;
-			case "canvas8": num = 8;
+			case "canvas8": this.setState({ num: 8 });
                 break;
-			case "canvas9": num = 9;
+			case "canvas9": this.setState({ num: 9 });
                 break;
 		}
-		
+        
+        this.evaluateBoxClick()
+    }
+
+    evaluateBoxClick() {
+
+        let { box, ctx, num, filled, gameOver, turn, symbol } = this.state;
+        
+        debugger;
 		if(filled[num - 1] === false) {
 			if(gameOver === false) {
 				if(turn % 2 !== 0) {
 					this.drawX();
 					turn++;
-					filled[num - 1] = true;
+                    filled[num - 1] = true;
+                    
+                    console.log('valor de symbol', symbol)
 					
 					if(this.winnerCheck(symbol, symbol[num - 1]) === true) {
+                        console.log('won! linea 143')
 						document.getElementById("result").innerText = "Player '" + symbol[num - 1] + "' won!";
 						gameOver = true;
 					}
@@ -199,6 +213,7 @@ class App extends Component {
 				
 				//winner check - ai wins
 				if(this.winnerCheck(symbol, symbol[nextMove.id]) === true) {
+                    console.log('won! linea 203')
 					document.getElementById("result").innerText = "Player '" + symbol[nextMove.id] + "' won!";
 					gameOver = true;
 				}
