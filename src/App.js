@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 // import fns from './utils/helpers';
+var turn = 1;
 
 class App extends Component {
 
@@ -11,7 +12,7 @@ class App extends Component {
             num: 0,
 	        box: null,
 	        ctx: null,
-	        turn: 1,
+	        // turn: 1,
 	        filled: null,
 	        symbol: null,
 	        winner: null,
@@ -68,7 +69,7 @@ class App extends Component {
 		ctx.strokeStyle = "white";
 		ctx.stroke();
 		ctx.closePath();
-		debugger;
+		// debugger;
 		symbol[num-1] = human;
     }
 
@@ -91,7 +92,7 @@ class App extends Component {
 	winnerCheck(symbol, player) {
 
         // console.log(symbol, player);
-        debugger;
+        // debugger;
  
         const { winner } = this.state;
 
@@ -140,33 +141,41 @@ class App extends Component {
 
     evaluateBoxClick() {
 
-        let { box, ctx, num, filled, gameOver, turn, symbol } = this.state;
+        let { box, ctx, num, filled, gameOver, symbol } = this.state;
         
-        debugger;
+        // debugger;
 		if(filled[num - 1] === false) {
 			if(gameOver === false) {
 				if(turn % 2 !== 0) {
 					this.drawX();
-					turn++;
-                    filled[num - 1] = true;
-                    
-                    console.log('valor de symbol', symbol)
-					
-					if(this.winnerCheck(symbol, symbol[num - 1]) === true) {
-                        console.log('won! linea 143')
-						document.getElementById("result").innerText = "Player '" + symbol[num - 1] + "' won!";
-						gameOver = true;
-					}
-					
-					if(turn > 9 && gameOver !== true) {
-						document.getElementById("result").innerText = "GAME OVER! IT WAS A DRAW!";
-						return;
-					}
-					
-					if(turn % 2 == 0) {
-						// this.playAI.bind(this);
-						this.playAI();
-					}
+                    // this.setState({ turn: turn + 1 });
+                    // this.setState((prevState, props) => ({
+                    //     turn: prevState.turn + 1
+                    // })); 
+                    debugger;
+                    // this.setState({ turn: ++this.state.turn }, () => {
+                        turn++
+                        filled[num - 1] = true;
+                        
+                        console.log('valor de symbol', symbol)
+                        
+                        if(this.winnerCheck(symbol, symbol[num - 1]) === true) {
+                            console.log('won! linea 143')
+                            document.getElementById("result").innerText = "Player '" + symbol[num - 1] + "' won!";
+                            gameOver = true;
+                        }
+                        
+                        if(turn > 9 && gameOver !== true) {
+                            document.getElementById("result").innerText = "GAME OVER! IT WAS A DRAW!";
+                            return;
+                        }
+                        
+                        if(turn % 2 == 0) {
+                            // this.playAI.bind(this);
+                            this.playAI();
+                        }
+
+                    // });
 				}
 			}
 			else {
@@ -193,9 +202,10 @@ class App extends Component {
     
     //6. Making the AI play - playAI() and minimax()
 	playAI() {
+        // debugger;
+        let { symbol, ai, gameOver, filled } = this.state;
 
-        let { symbol, ai, gameOver, turn, filled } = this.state;
-
+        debugger;
 		var nextMove = this.miniMax(symbol, ai); 
         var nextId = "canvas" + (nextMove.id + 1);
         
@@ -207,8 +217,9 @@ class App extends Component {
         });
 		if(gameOver === false) {
 			if(turn % 2 === 0) { //if turn is even
-				this.drawO(nextMove.id);
-				turn++;
+                this.drawO(nextMove.id);
+                // this.setState({ turn: turn + 1 });
+                turn++;
 				filled[nextMove.id] = true;
 				
 				//winner check - ai wins
@@ -263,7 +274,8 @@ class App extends Component {
 			//generate the new board with the current move
 			curMove.id = empty[i]; //4
 			newSymbol[empty[i]] = player; //AI
-			
+            
+            // debugger;
 			if(player === ai) {
 				//result = [{id:4,score:-10}], 
 				//curMove = {id:1,score:-10}
@@ -312,7 +324,8 @@ class App extends Component {
 					bestMove = j;
 				}
 			}
-		}
+        }
+        // debugger;
 		return posMoves[bestMove]; 
 		//posMoves[0] = {id:4,score:10}
 	}
