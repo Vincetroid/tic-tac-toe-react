@@ -1,9 +1,10 @@
 h1#result {
     font-size: 30px;
     font-family: Verdana;
-    color: chocolate;
+    color: green;
     text-align: center;
     margin-bottom: 30px;
+    height: 36.8px;
 }
 
 canvas {
@@ -27,7 +28,6 @@ canvas {
     width: 318px;
     height: 318px;
     display: inline-block;
-    float: left;
 	border: 3px solid darkslategray; 
 }
 
@@ -49,7 +49,7 @@ button {
     font-size: 20px;
     font-weight: bold;
     font-family: helvetica;
-    background-color: darkslateblue;
+    background-color: darkgoldenrod;
     color: white;
     border: 1px solid black; 
 	box-shadow: 2px 2px 2px 1px rgba(88, 80, 80, 0.7);

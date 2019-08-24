@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import './App.css';
-// import fns from './utils/helpers';
 var turn = 1;
 
 class App extends Component {
@@ -12,10 +11,6 @@ class App extends Component {
             num: 0,
 	        box: null,
 	        ctx: null,
-	        // turn: 1,
-	        filled: null,
-	        symbol: null,
-	        winner: null,
 	        gameOver: false,
 	        human: 'X',
 	        ai: 'O',
@@ -29,8 +24,8 @@ class App extends Component {
 
     componentDidMount() {
         
-        const filledClone = this.state.filled.slice(); //creates the clone of the state
-        const symbolClone = this.state.symbol.slice(); //creates the clone of the state
+        const filledClone = this.state.filled.slice();
+        const symbolClone = this.state.symbol.slice();
         
         for(var i = 0; i < 9; i++) {
             filledClone[i] = false;
@@ -42,13 +37,16 @@ class App extends Component {
         }
 
         document.getElementById("tic").addEventListener("click", this.handleBoxClick.bind(this));
-        // document.getElementById("tic").addEventListener("click", () => console.log(this) );
-        
     }
 
     handleBoxClick(e) {
-        // console.log(this)
         this.boxClick(e.target.id);
+    }
+
+    
+    
+    blockBoxClick() {
+        document.getElementById("tic").style.pointerEvents = "none";
     }
 
     newGame() {
@@ -58,7 +56,7 @@ class App extends Component {
     drawX() {
         let { box, ctx, symbol, num, human } = this.state;
 
-        box.style.backgroundColor = "#fb5181";
+        box.style.backgroundColor = "rgb(113, 69, 145)";
 		ctx.beginPath();
 		ctx.moveTo(15,15);
 		ctx.lineTo(85,85);
@@ -69,7 +67,6 @@ class App extends Component {
 		ctx.strokeStyle = "white";
 		ctx.stroke();
 		ctx.closePath();
-		// debugger;
 		symbol[num-1] = human;
     }
 
@@ -90,14 +87,10 @@ class App extends Component {
 
     //3.Winner check function 
 	winnerCheck(symbol, player) {
-
-        // console.log(symbol, player);
-        // debugger;
- 
         const { winner } = this.state;
 
 		for(var j = 0; j < winner.length; j++) {
-			if((symbol[winner[j][0]] == player) && (symbol[winner[j][1]] == player) && (symbol[winner[j][2]] == player)) {
+			if((symbol[winner[j][0]] === player) && (symbol[winner[j][1]] === player) && (symbol[winner[j][2]] === player)) {
 				return true;
 			}
 		}
@@ -106,9 +99,6 @@ class App extends Component {
     
     //4. Box click function - human playing
 	boxClick(numId) {
-        console.log('boxClick', numId)
-        
-
         this.setState({
             box: document.getElementById(numId),
         });
@@ -134,48 +124,39 @@ class App extends Component {
                 break;
 			case "canvas9": this.setState({ num: 9 });
                 break;
+            default: alert("Sorry, there was an error");
+                break;
 		}
         
         this.evaluateBoxClick()
     }
 
     evaluateBoxClick() {
-
-        let { box, ctx, num, filled, gameOver, symbol } = this.state;
+        let { num, filled, gameOver, symbol } = this.state;
         
-        // debugger;
 		if(filled[num - 1] === false) {
 			if(gameOver === false) {
 				if(turn % 2 !== 0) {
 					this.drawX();
-                    // this.setState({ turn: turn + 1 });
-                    // this.setState((prevState, props) => ({
-                    //     turn: prevState.turn + 1
-                    // })); 
-                    debugger;
-                    // this.setState({ turn: ++this.state.turn }, () => {
-                        turn++
-                        filled[num - 1] = true;
-                        
-                        console.log('valor de symbol', symbol)
-                        
-                        if(this.winnerCheck(symbol, symbol[num - 1]) === true) {
-                            console.log('won! linea 143')
-                            document.getElementById("result").innerText = "Player '" + symbol[num - 1] + "' won!";
-                            gameOver = true;
-                        }
-                        
-                        if(turn > 9 && gameOver !== true) {
-                            document.getElementById("result").innerText = "GAME OVER! IT WAS A DRAW!";
-                            return;
-                        }
-                        
-                        if(turn % 2 == 0) {
-                            // this.playAI.bind(this);
-                            this.playAI();
-                        }
+                    turn++
+                    filled[num - 1] = true;
 
-                    // });
+                    if (this.winnerCheck(symbol, symbol[num - 1]) === true) {
+                        document.getElementById("result").innerText = "Player '" + symbol[num - 1] + "' won!";
+                        gameOver = true;
+                        this.blockBoxClick();
+                    }
+                    
+                    if (turn > 9 && gameOver !== true) {
+                        document.getElementById("result").innerText = "GAME OVER! IT WAS A DRAW!";
+                        this.blockBoxClick();
+                        return;
+                    }
+
+                    if (turn % 2 === 0) {
+                        this.playAI();
+                    }
+
 				}
 			}
 			else {
@@ -202,10 +183,8 @@ class App extends Component {
     
     //6. Making the AI play - playAI() and minimax()
 	playAI() {
-        // debugger;
         let { symbol, ai, gameOver, filled } = this.state;
 
-        debugger;
 		var nextMove = this.miniMax(symbol, ai); 
         var nextId = "canvas" + (nextMove.id + 1);
         
@@ -216,22 +195,21 @@ class App extends Component {
             ctx: this.state.box.getContext("2d"),
         });
 		if(gameOver === false) {
-			if(turn % 2 === 0) { //if turn is even
+			if(turn % 2 === 0) {
                 this.drawO(nextMove.id);
-                // this.setState({ turn: turn + 1 });
                 turn++;
 				filled[nextMove.id] = true;
 				
 				//winner check - ai wins
 				if(this.winnerCheck(symbol, symbol[nextMove.id]) === true) {
-                    console.log('won! linea 203')
 					document.getElementById("result").innerText = "Player '" + symbol[nextMove.id] + "' won!";
-					gameOver = true;
+                    gameOver = true;
+                    this.blockBoxClick();
 				}
 				
-				//draw condition
 				if(turn > 9 && gameOver !== true) {
-					document.getElementById("result").innerText = "GAME OVER! IT WAS A DRAW!";
+                    document.getElementById("result").innerText = "GAME OVER! IT WAS A DRAW!";
+                    this.blockBoxClick();
 				}
 			}
 		}
@@ -246,7 +224,7 @@ class App extends Component {
         let { human, ai, result } = this.state;
 
 		var empty = [];
-		empty = this.emptyBoxes(newSymbol); //[]
+		empty = this.emptyBoxes(newSymbol);
 		
 		if(this.winnerCheck(newSymbol, human)) {
 			return { score: -10 }; //human wins
@@ -264,79 +242,58 @@ class App extends Component {
 			return { score: 0 }; //game is draw
 		}
 		
-		//if its not a terminal state
-		//possible moves- their indices and score values
+		//if it's not terminal state
+		//possible moves- their indexes and score values
 		var posMoves = []; 
-		//[4] - Example
 		for(var i = 0; i < empty.length; i++) {
-			//current move - index of current move,score
+			//current move - index of current move, score
 			var curMove = {};
 			//generate the new board with the current move
-			curMove.id = empty[i]; //4
-			newSymbol[empty[i]] = player; //AI
+			curMove.id = empty[i];
+			newSymbol[empty[i]] = player;
             
-            // debugger;
 			if(player === ai) {
-				//result = [{id:4,score:-10}], 
-				//curMove = {id:1,score:-10}
-				result = this.miniMax(newSymbol, human); //index and score
-				curMove.score = result.score; //10
+				result = this.miniMax(newSymbol, human);
+				curMove.score = result.score;
 			}
 			else {
-				//result = [{id:6, score:10}]
-				//curMove = {id:6, score:10}
 				result = this.miniMax(newSymbol, ai);
-				curMove.score = result.score; //-10
-				//level 2 move 1 curMove = {id: 6, score: 10}
-				//level 3 move 1 -> posMoves = [{id:4,score:10}]
-				//level 2 move 1 -> posMoves = [{id:6, score:10}]
+				curMove.score = result.score;
 			}
-			
-			//level 1 move 1 -> posMoves = [{id:4,score:-10},{id:6, score:10}]
-			//level 0 -> posMoves = [{id:4,score:10},{id:6,score:10},{id:1,score:-10}]
-			//empty:[1,4,6]
+		
 			newSymbol[empty[i]] = '';
 			
-			posMoves.push(curMove); //[{id: 1, score: -10}]
+			posMoves.push(curMove);
 			
 		}
 		
 		//Calculate score of intermediate states - best move + score with respect to that player + return statement 
 		var bestMove;
-		//AI - max player (always) -> choose maximum value, human - min player -> choose minimum value
-		
 		if(player === ai) {
-			//posMoves = [{id:4,score:10},{id:6,score:10},{id:1,score:-10}]
 			var highestScore = -1000;
-			for(var j=0; j<posMoves.length;j++) {
+			for(let j = 0; j < posMoves.length; j++) {
 				if(posMoves[j].score > highestScore) {
 					highestScore = posMoves[j].score;
-					bestMove = j; //0
+					bestMove = j;
 				}
 			}
 		}
-		//posMoves = [{id:4,score:-10},{id:6, score:10}]
 		else {
 			var lowestScore = 1000;
-			for(var j = 0; j < posMoves.length; j++) {
+			for(let j = 0; j < posMoves.length; j++) {
 				if(posMoves[j].score < lowestScore) {
 					lowestScore = posMoves[j].score;
 					bestMove = j;
 				}
 			}
         }
-        // debugger;
 		return posMoves[bestMove]; 
-		//posMoves[0] = {id:4,score:10}
 	}
 
     render() {
-
-        console.log(this.state)
-        
         return (
             <div>
-                <h1 id="result"></h1>
+                <h1 id="result"> </h1>
         
                 <section id="game">
                     <div id="tic">
@@ -353,11 +310,10 @@ class App extends Component {
                         <canvas id="canvas7" width="100" height="100"></canvas>
                         <canvas id="canvas8" width="100" height="100"></canvas>
                         <canvas id="canvas9" width="100" height="100"></canvas>
-                        <center>
-                            <button onClick={(v) => this.newGame(v)}  id="new">NEW GAME</button>
-                        </center>
                     </div>
-                    
+                    <center>
+                        <button onClick={(v) => this.newGame(v)}  id="new">NEW GAME</button>
+                    </center>
                 </section>
             </div>
         );
