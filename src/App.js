@@ -36,7 +36,7 @@ class App extends Component {
             });
         }
 
-        document.getElementById("tic").addEventListener("click", this.handleBoxClick.bind(this));
+        this.handleBoxClick.bind(this);
     }
 
     handleBoxClick(e) {
