@@ -292,7 +292,7 @@ class App extends Component {
 
     render() {
         return (
-            <div>
+            <div data-test="component-app">
                 <h1 id="result"> </h1>
         
                 <section id="game">
