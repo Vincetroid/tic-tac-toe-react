@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import './App.css';
 var turn = 1;
+var num = 0;
+var box = null, ctx = null;
 
 class App extends Component {
 
@@ -8,9 +10,9 @@ class App extends Component {
         super(props);
 
         this.state = {
-            num: 0,
-	        box: null,
-	        ctx: null,
+            // num: 0,
+	        // box: null,
+	        // ctx: null,
 	        gameOver: false,
 	        human: 'X',
 	        ai: 'O',
@@ -19,6 +21,8 @@ class App extends Component {
             symbol: [],
             winner: [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]],
         }
+
+        // this.title = React.createRef()
 
     }
 
@@ -36,14 +40,26 @@ class App extends Component {
             });
         }
 
-        document.getElementById("tic").addEventListener("click", this.handleBoxClick.bind(this));
+        // document.getElementById("tic").addEventListener("click", this.handleBoxClick.bind(this));
+
+        // this.handleBoxClick = this.handleBoxClick.bind(this);
     }
 
     handleBoxClick(e) {
-        this.boxClick(e.target.id);
+        console.log('e')
+        console.log(e)
+        // console.log(e.nativeEvent.target.id);
+        console.log(e.target.id);
+        // this.boxClick(e.target.id);
+        // debugger;
+        const id = e.target.id;
+        this.boxClick(id);
+        // this.test();
     }
 
-    
+    test() {
+        console.log(8980980980)
+    }
     
     blockBoxClick() {
         document.getElementById("tic").style.pointerEvents = "none";
@@ -54,8 +70,8 @@ class App extends Component {
     }
 
     drawX() {
-        let { box, ctx, symbol, num, human } = this.state;
-
+        let {symbol, human } = this.state;
+        // debugger
         box.style.backgroundColor = "rgb(113, 69, 145)";
 		ctx.beginPath();
 		ctx.moveTo(15,15);
@@ -72,7 +88,7 @@ class App extends Component {
 
     //Drawing O
 	drawO(next) {
-        const { box, ctx, symbol, ai } = this.state;
+        const { symbol, ai } = this.state;
 
 		box.style.backgroundColor = "#93f273";
 		ctx.beginPath();
@@ -99,30 +115,37 @@ class App extends Component {
     
     //4. Box click function - human playing
 	boxClick(numId) {
-        this.setState({
-            box: document.getElementById(numId),
-        });
-        this.setState({
-            ctx: this.state.box.getContext("2d"),
-        });
+        // debugger;
+        // const nnn = document.getElementById(numId);
+        // const mmm = this.refs[numId];
+        // const ccctx = this.refs[numId].getContext("2d");
+        
+        // this.setState({
+        //     box: this.refs[numId],
+        // });
+        // this.setState({
+        //     ctx: this.refs[numId].getContext("2d"),
+        // });
+        box = this.refs[numId];
+        ctx = this.refs[numId].getContext("2d");
 		switch(numId) {
-			case "canvas1": this.setState({ num: 1 });
+			case "canvas1": num = 1;
                 break;
-			case "canvas2": this.setState({ num: 2 });
+			case "canvas2": num = 2;
                 break;
-			case "canvas3": this.setState({ num: 3 });
+			case "canvas3": num = 3;
                 break;
-			case "canvas4": this.setState({ num: 4 });
+			case "canvas4": num = 4;
                 break;
-			case "canvas5": this.setState({ num: 5 });
+			case "canvas5": num = 5;
                 break;
-			case "canvas6": this.setState({ num: 6 });
+			case "canvas6": num = 6;
                 break;
-			case "canvas7": this.setState({ num: 7 });
+			case "canvas7": num = 7;
                 break;
-			case "canvas8": this.setState({ num: 8 });
+			case "canvas8": num = 8;
                 break;
-			case "canvas9": this.setState({ num: 9 });
+			case "canvas9": num = 9;
                 break;
             default: alert("Sorry, there was an error");
                 break;
@@ -132,8 +155,8 @@ class App extends Component {
     }
 
     evaluateBoxClick() {
-        let { num, filled, gameOver, symbol } = this.state;
-        
+        let { filled, gameOver, symbol } = this.state;
+        // debugger;
 		if(filled[num - 1] === false) {
 			if(gameOver === false) {
 				if(turn % 2 !== 0) {
@@ -188,13 +211,21 @@ class App extends Component {
 		var nextMove = this.miniMax(symbol, ai); 
         var nextId = "canvas" + (nextMove.id + 1);
         
-        this.setState({
-            box: document.getElementById(nextId),
-        });
-        this.setState({
-            ctx: this.state.box.getContext("2d"),
-        });
-		if(gameOver === false) {
+        // this.setState({
+        //     box: document.getElementById(nextId),
+        // });
+        // this.setState({
+        //     ctx: this.state.box.getContext("2d"),
+        // });
+        // this.setState({
+        //     box: this.refs[nextId],
+        // });
+        // this.setState({
+        //     ctx: this.refs[nextId].getContext("2d"),
+        // });
+        box = this.refs[nextId];
+        ctx = this.refs[nextId].getContext("2d");
+        if(gameOver === false) {
 			if(turn % 2 === 0) {
                 this.drawO(nextMove.id);
                 turn++;
@@ -296,8 +327,23 @@ class App extends Component {
                 <h1 id="result"> </h1>
         
                 <section id="game">
-                    <div id="tic">
-                        <canvas id="canvas1" width="100" height="100"></canvas> 
+                    {/* <div id="tic"> */}
+                    <div id="tic" onClick={this.handleBoxClick.bind(this)}>
+                    {/* <div id="tic" onClick={this.handleBoxClick}> */}
+                        <canvas id="canvas1" ref="canvas1" width="100" height="100"></canvas> 
+                        <canvas id="canvas3" ref="canvas3" width="100" height="100"></canvas> 
+                        <canvas id="canvas2" ref="canvas2" width="100" height="100"></canvas>
+                        <br/>
+                        
+                        <canvas id="canvas4" ref="canvas4" width="100" height="100"></canvas>
+                        <canvas id="canvas5" ref="canvas5" width="100" height="100"></canvas>
+                        <canvas id="canvas6" ref="canvas6" width="100" height="100"></canvas>
+                        <br/>
+
+                        <canvas id="canvas7" ref="canvas7" width="100" height="100"></canvas>
+                        <canvas id="canvas8" ref="canvas8" width="100" height="100"></canvas>
+                        <canvas id="canvas9" ref="canvas9" width="100" height="100"></canvas>
+                        {/* <canvas id="canvas1" width="100" height="100"></canvas> 
                         <canvas id="canvas2" width="100" height="100"></canvas>
                         <canvas id="canvas3" width="100" height="100"></canvas> 
                         <br/>
@@ -309,7 +355,7 @@ class App extends Component {
                         
                         <canvas id="canvas7" width="100" height="100"></canvas>
                         <canvas id="canvas8" width="100" height="100"></canvas>
-                        <canvas id="canvas9" width="100" height="100"></canvas>
+                        <canvas id="canvas9" width="100" height="100"></canvas> */}
                     </div>
                     <center>
                         <button onClick={(v) => this.newGame(v)}  id="new">NEW GAME</button>
