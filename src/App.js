@@ -10,9 +10,6 @@ class App extends Component {
         super(props);
 
         this.state = {
-            // num: 0,
-	        // box: null,
-	        // ctx: null,
 	        gameOver: false,
 	        human: 'X',
 	        ai: 'O',
@@ -21,8 +18,6 @@ class App extends Component {
             symbol: [],
             winner: [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]],
         }
-
-        // this.title = React.createRef()
 
     }
 
@@ -40,25 +35,11 @@ class App extends Component {
             });
         }
 
-        // document.getElementById("tic").addEventListener("click", this.handleBoxClick.bind(this));
-
-        // this.handleBoxClick = this.handleBoxClick.bind(this);
     }
 
     handleBoxClick(e) {
-        console.log('e')
-        console.log(e)
-        // console.log(e.nativeEvent.target.id);
-        console.log(e.target.id);
-        // this.boxClick(e.target.id);
-        // debugger;
         const id = e.target.id;
         this.boxClick(id);
-        // this.test();
-    }
-
-    test() {
-        console.log(8980980980)
     }
     
     blockBoxClick() {
@@ -71,7 +52,6 @@ class App extends Component {
 
     drawX() {
         let {symbol, human } = this.state;
-        // debugger
         box.style.backgroundColor = "rgb(113, 69, 145)";
 		ctx.beginPath();
 		ctx.moveTo(15,15);
@@ -115,17 +95,6 @@ class App extends Component {
     
     //4. Box click function - human playing
 	boxClick(numId) {
-        // debugger;
-        // const nnn = document.getElementById(numId);
-        // const mmm = this.refs[numId];
-        // const ccctx = this.refs[numId].getContext("2d");
-        
-        // this.setState({
-        //     box: this.refs[numId],
-        // });
-        // this.setState({
-        //     ctx: this.refs[numId].getContext("2d"),
-        // });
         box = this.refs[numId];
         ctx = this.refs[numId].getContext("2d");
 		switch(numId) {
@@ -156,7 +125,6 @@ class App extends Component {
 
     evaluateBoxClick() {
         let { filled, gameOver, symbol } = this.state;
-        // debugger;
 		if(filled[num - 1] === false) {
 			if(gameOver === false) {
 				if(turn % 2 !== 0) {
@@ -211,18 +179,6 @@ class App extends Component {
 		var nextMove = this.miniMax(symbol, ai); 
         var nextId = "canvas" + (nextMove.id + 1);
         
-        // this.setState({
-        //     box: document.getElementById(nextId),
-        // });
-        // this.setState({
-        //     ctx: this.state.box.getContext("2d"),
-        // });
-        // this.setState({
-        //     box: this.refs[nextId],
-        // });
-        // this.setState({
-        //     ctx: this.refs[nextId].getContext("2d"),
-        // });
         box = this.refs[nextId];
         ctx = this.refs[nextId].getContext("2d");
         if(gameOver === false) {
@@ -323,13 +279,11 @@ class App extends Component {
 
     render() {
         return (
-            <div data-test="component-app">
+            <div data-test="root-tag">
                 <h1 id="result"> </h1>
         
-                <section id="game">
-                    {/* <div id="tic"> */}
-                    <div id="tic" onClick={this.handleBoxClick.bind(this)}>
-                    {/* <div id="tic" onClick={this.handleBoxClick}> */}
+                <section id="game" data-test="game-section">
+                    <div id="tic" onClick={this.handleBoxClick.bind(this)} data-test="board-display">
                         <canvas id="canvas1" ref="canvas1" width="100" height="100"></canvas> 
                         <canvas id="canvas3" ref="canvas3" width="100" height="100"></canvas> 
                         <canvas id="canvas2" ref="canvas2" width="100" height="100"></canvas>
@@ -343,19 +297,6 @@ class App extends Component {
                         <canvas id="canvas7" ref="canvas7" width="100" height="100"></canvas>
                         <canvas id="canvas8" ref="canvas8" width="100" height="100"></canvas>
                         <canvas id="canvas9" ref="canvas9" width="100" height="100"></canvas>
-                        {/* <canvas id="canvas1" width="100" height="100"></canvas> 
-                        <canvas id="canvas2" width="100" height="100"></canvas>
-                        <canvas id="canvas3" width="100" height="100"></canvas> 
-                        <br/>
-                        
-                        <canvas id="canvas4" width="100" height="100"></canvas>
-                        <canvas id="canvas5" width="100" height="100"></canvas>
-                        <canvas id="canvas6" width="100" height="100"></canvas>
-                        <br/>
-                        
-                        <canvas id="canvas7" width="100" height="100"></canvas>
-                        <canvas id="canvas8" width="100" height="100"></canvas>
-                        <canvas id="canvas9" width="100" height="100"></canvas> */}
                     </div>
                     <center>
                         <button onClick={(v) => this.newGame(v)}  id="new">NEW GAME</button>

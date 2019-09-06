@@ -27,9 +27,28 @@ const setup = (props = {}, state = null) => {
 const findByTestAttr = (wrapper, val) => {
     return wrapper.find(`[data-test="${val}"]`);
 }
-
 test('renders without crashing', () => {
     const wrapper = setup();
-    const appComponent = findByTestAttr(wrapper, 'component-app');
+    const appComponent = findByTestAttr(wrapper, 'root-tag');
     expect(appComponent.length).toBe(1);
+});
+
+test('renders #game section', () => {
+    const wrapper = setup();
+    const appComponent = findByTestAttr(wrapper, 'game-section');
+    // expect(appComponent).toBe(9);
+    expect(appComponent.length).toBe(1);
+});
+
+// it('renders three <Foo /> components', () => {
+//     const wrapper = setup();
+//     const appComponent = findByTestAttr(wrapper, 'board-display');    
+//     expect(wrapper.find(Foo)).to.have.lengthOf(3);
+// });
+
+describe('<App />', () => {
+    it('render squares', () => {
+        const wrapper = shallow(<App />);
+        expect(wrapper.find('#board-display')).;
+    });
 });
