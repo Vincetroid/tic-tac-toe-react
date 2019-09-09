@@ -280,7 +280,7 @@ class App extends Component {
     render() {
         return (
             <div data-test="root-tag">
-                <h1 id="result"> </h1>
+                <h1 id="result" data-test="result-h1"> </h1>
         
                 <section id="game" data-test="game-section">
                     <div id="tic" onClick={this.handleBoxClick.bind(this)} data-test="board-display">

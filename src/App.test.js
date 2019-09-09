@@ -29,26 +29,86 @@ const findByTestAttr = (wrapper, val) => {
 }
 test('renders without crashing', () => {
     const wrapper = setup();
-    const appComponent = findByTestAttr(wrapper, 'root-tag');
-    expect(appComponent.length).toBe(1);
+    const element = findByTestAttr(wrapper, 'root-tag');
+    // expect(element).to.have.lengthOf(1);
+    expect(element.length).toBe(1);
 });
 
-test('renders #game section', () => {
+test('renders game section', () => {
     const wrapper = setup();
-    const appComponent = findByTestAttr(wrapper, 'game-section');
-    // expect(appComponent).toBe(9);
-    expect(appComponent.length).toBe(1);
+    const element = findByTestAttr(wrapper, 'game-section');
+    expect(element.length).toBe(1);
 });
 
-// it('renders three <Foo /> components', () => {
+test('display empty h1 tag at the beginning', () => {
+    const wrapper = setup();
+    const element = findByTestAttr(wrapper, 'result-h1');
+    expect(element.length).toBe(1);
+});
+
+// test('no gameOver initializing', () => {
+//     const wrapper = setup(null, {
+//         gameOver: false,
+//         human: 'X',
+//         ai: 'O',
+//         result: {},
+//         filled: [],
+//         symbol: [],
+//     });
+//     console.log(wrapper.state());
+//     const element = findByTestAttr(wrapper, 'counter-display');
+//     // expect(element.text()).toContain(counter + 1)
+//     expect(element.props().gameOver).toEqual(false);
+// });
+
+test('has winning combinations', () => {
+    const winner = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    expect(winner).toContainEqual([3,4,5],[0,1,2],[6,7,8],[1,4,7],[0,3,6],[2,5,8],[2,4,6],[0,4,8]);
+});
+
+test('renders board', () => {
+    const wrapper = setup();
+    const element = findByTestAttr(wrapper, 'board-display');    
+    expect(element.length).toBe(1);
+});
+
+test('render game boxes (canvas elements)', () => {
+    const wrapper = shallow(<App />);
+    const element = wrapper.find('canvas');
+    expect(element.length).toBe(9);
+});
+
+test('display new game button', () => {
+    const wrapper = shallow(<App />);
+    const element = wrapper.find('button');
+    expect(element.length).toBe(1);
+});
+
+// test('renders three <Foo /> components', () => {
 //     const wrapper = setup();
-//     const appComponent = findByTestAttr(wrapper, 'board-display');    
+//     const element = findByTestAttr(wrapper, 'board-display');    
 //     expect(wrapper.find(Foo)).to.have.lengthOf(3);
 // });
 
-describe('<App />', () => {
-    it('render squares', () => {
-        const wrapper = shallow(<App />);
-        expect(wrapper.find('#board-display')).;
-    });
-});
+// describe('<App />', () => {
+//     it('render squares', () => {
+//         const wrapper = shallow(<App />);
+//         expect(wrapper.find('#board-display')).;
+//     });
+// });
+
+// test('startclicking button', () => {
+//     const counter = 7;
+//     const wrapper = setup(null, { counter });
+  
+//     // find button and click
+//     const button = findByTestAttr(wrapper, 'btn-new-game');
+//     button.simulate('click');
+//     wrapper.update();
+  
+//     // find display and test value
+//     const counterDisplay = findByTestAttr(wrapper, 'counter-display');
+//     expect(counterDisplay.text()).toContain(counter + 1)
+  
+//   });
+
