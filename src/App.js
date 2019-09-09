@@ -299,7 +299,7 @@ class App extends Component {
                         <canvas id="canvas9" ref="canvas9" width="100" height="100"></canvas>
                     </div>
                     <center>
-                        <button onClick={(v) => this.newGame(v)}  id="new">NEW GAME</button>
+                        <button onClick={(v) => this.newGame(v)} id="new" data-test="btn-new-game">NEW GAME</button>
                     </center>
                 </section>
             </div>
